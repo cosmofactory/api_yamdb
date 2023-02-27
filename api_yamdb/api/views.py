@@ -119,7 +119,9 @@ class TitleViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
 
     def get_queryset(self):
-        queryset = Title.objects.annotate(rating=Avg('reviews__score'))
+        queryset = Title.objects.annotate(
+            rating=Avg('reviews__score')
+        ).order_by('name')
         genre = self.request.query_params.get('genre')
         if genre is not None:
             queryset = queryset.filter(genre__slug=genre)
